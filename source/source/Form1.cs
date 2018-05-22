@@ -34,7 +34,16 @@ namespace source
 
         private void btnDrawChessBoard_Click(object sender, EventArgs e)
         {
-            if (txtNumber.Text == "") return;
+            if (txtNumber.Text == "")
+            {
+                MessageBox.Show("Kích thước bàn cờ không được để trống", "Lỗi nhập", MessageBoxButtons.OK);
+                txtNumber.Text = "0";
+                return;
+
+            }
+
+            groupBox1.Enabled = true;
+            btnRun.Enabled = true;
 
             sizeOfChessBoard = int.Parse(txtNumber.Text);
             arrHorsePass = new Boolean[sizeOfChessBoard, sizeOfChessBoard];
@@ -58,16 +67,9 @@ namespace source
                         graphic.FillRectangle(j % 2 != 0 ? whiteBrush : brownBrush, new RectangleF(j * width, i * width, width, width));
                     }
             }
-        }
 
-        private void btnRun_Click(object sender, EventArgs e)
-        {
-            int x = int.Parse(txtX.Text);
-            int y = int.Parse(txtY.Text);
-
-            currentPoint = new Point(x, y);
-            drawHorse(currentPoint);
-            timer.Start();
+            txtNumber.Enabled = false;
+            btnDrawChessBoard.Enabled = false;
         }
 
         private void drawHorse(Point point)
@@ -144,6 +146,94 @@ namespace source
             drawHorse(currentPoint);
             currentPoint = findNextPoint(currentPoint);
             drawHorse(currentPoint);
-        } 
+        }
+
+        private void txtNumber_TextChanged(object sender, EventArgs e)
+        {
+            if (txtNumber.Text.Trim() == "") { return; }
+
+            try
+            {
+                double.Parse(txtNumber.Text.Trim());
+            }
+            catch
+            {
+                MessageBox.Show("Vui lòng nhập số", "Lỗi nhập", MessageBoxButtons.OK);
+                txtNumber.Text = "0";
+            }
+        }
+
+        private void txtX_TextChanged(object sender, EventArgs e)
+        {
+            if (txtX.Text.Trim() == "") { return; }
+
+            try
+            {
+                double.Parse(txtX.Text.Trim());
+            }
+            catch
+            {
+                MessageBox.Show("Vui lòng nhập số", "Lỗi nhập", MessageBoxButtons.OK);
+                txtX.Text = "0";
+            }
+
+            if(double.Parse(txtX.Text.Trim()) >= double.Parse(txtNumber.Text.Trim()))
+            {
+                MessageBox.Show("Tọa độ phải nhỏ hơn kích thước bàn cờ", "Lỗi nhập", MessageBoxButtons.OK);
+                txtX.Text = "0";
+            }
+        }
+
+        private void txtY_TextChanged(object sender, EventArgs e)
+        {
+            if (txtY.Text.Trim() == "") { return; }
+
+            try
+            {
+                double.Parse(txtY.Text.Trim());
+            }
+            catch
+            {
+                MessageBox.Show("Vui lòng nhập số", "Lỗi nhập", MessageBoxButtons.OK);
+                txtY.Text = "0";
+            }
+
+            if (double.Parse(txtY.Text.Trim()) >= double.Parse(txtNumber.Text.Trim()))
+            {
+                MessageBox.Show("Tọa độ phải nhỏ hơn kích thước bàn cờ", "Lỗi nhập", MessageBoxButtons.OK);
+                txtY.Text = "0";
+            }
+        }
+
+        private void btnRun_Click(object sender, EventArgs e)
+        {
+            if(txtX.Text.Trim() == "")
+            {
+                MessageBox.Show("Chưa nhập X", "Lỗi nhập", MessageBoxButtons.OK);
+                txtX.Text = "0";
+                return;
+            }
+
+            if (txtY.Text.Trim() == "")
+            {
+                MessageBox.Show("Chưa nhập Y", "Lỗi nhập", MessageBoxButtons.OK);
+                txtY.Text = "0";
+                return;
+            }
+
+            groupBox1.Enabled = false;
+
+            int x = int.Parse(txtX.Text);
+            int y = int.Parse(txtY.Text);
+
+            currentPoint = new Point(x, y);
+            drawHorse(currentPoint);
+            timer.Start();
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
