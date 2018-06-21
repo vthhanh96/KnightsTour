@@ -143,9 +143,15 @@ namespace source
                 return;
             }
 
+            nextPoint = findNextPoint(currentPoint);
+            if (isStop)
+            {
+                labelFinish.Visible = true;
+                return;
+            }
             drawHorse(currentPoint);
-            currentPoint = findNextPoint(currentPoint);
-            drawHorse(currentPoint);
+            drawHorse(nextPoint);
+            currentPoint = nextPoint;
         }
 
         private void txtNumber_TextChanged(object sender, EventArgs e)
